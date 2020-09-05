@@ -26,7 +26,7 @@ SECRET_KEY = 'ge*b5++fb_q@=36)!+h2^q(^ao2nyd85&r==yopnyitdgpx4k('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['learning-kids.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
