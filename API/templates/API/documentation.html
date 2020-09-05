@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+
+</head>
+
+<body>
+
+<style type="text/css">
+	body{
+		background-color: #f2f2f2;
+	}
+
+	.code-card{
+		padding-left:10px;
+		padding-right:10px;
+		padding-top:5px;
+		padding-bottom:5px;
+		border-radius: 10px;
+		background-color: #f2f2f2;
+		border: 1px solid #BEBEBE;
+	}
+</style>
+<style type="text/css">
+	@media (min-width: 768px) {
+	  html {
+	    font-size: 16px;
+	  }
+	}
+
+	.search-bar{
+		max-width: 500px;
+		width: 100%;
+	}
+
+	form{
+		width: 100%;
+	}
+
+</style>
+
+<!-- Header -->
+
+<!-- End Header -->
+
+<!-- Body -->
+<style type="text/css">
+	.main{
+		min-height: 100vh;
+		height: 100%;
+	}
+</style>
+<div class="main">
+	
+
+<style type="text/css">
+	.card{
+		background-color: #fff;
+		padding:20px;
+	}
+	.rounded {
+	  border-radius: 50px;
+	  background: #fff;
+	  padding:20px;
+	  border: 1px solid #BEBEBE;
+	}
+
+</style>
+
+<div class="container">
+
+
+
+<div class="row">
+	<div class="col-lg-9 offset-lg-1">
+		<div class="card">
+
+
+			<!-- Documentation -->
+			<h3>Documentation</h3>
+			<hr>
+			<br>
+            <!-- Registering a user -->
+            <h6>Registering a User</h6>
+            <div class="p-4">
+                <p>Request: POST</p>
+
+                <p>Url:</p>
+				<div class="code-card">
+					<code>
+						https://learning-kids.herokuapp.com/api/register/
+					</code>
+				</div>
+				<br>
+				<p>Params:</p>
+				<div class="code-card">
+					<p>username (Your username)</p>
+					<p>email (Your email)</p>
+					<p>password1 (first password)</p>
+					<p>password2 (confirm password)</p>
+				</div>
+				<br>
+				<p>Success Response:</p>
+				<div class="code-card">
+					<code>
+						{<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"response": "successfully registered a Parent account",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp; "email": "lekan@gmail.com",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"username": "lekan",,<br>
+						&nbsp;&nbsp;&nbsp;&nbsp; "token": "ef9153a6f4d842cca47808f0c16fde814b2ff9fb"<br>
+						}<br>
+					</code>
+				</div>
+				<p><small>NB: A default parent profile is created for a newly registered user</small></p>
+            </div>
+
+			<!-- Obtaining an Authentication token -->
+			<h6 id="obtaining-an-authentication-token">Obtaining an Authentication Token</h6>
+			<div class="p-4">
+
+				<p>Request: POST</p>
+				
+				<p>Url:</p>
+				<div class="code-card">
+					<code>
+						https://learning-kids.herokuapp.com/api/login/
+					</code>
+				</div>
+				<br>
+				<p>Params:</p>
+				<div class="code-card">
+					<p>username (Your username)</p>
+					<p>password (Your password)</p>
+				</div>
+				<br>
+				<p>Success Response:</p>
+				<div class="code-card">
+					<code>
+						{<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"response": "Successfully authenticated.",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"pk": 9,<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"username": "lekan",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp; "token": "ef9153a6f4d842cca47808f0c16fde814b2ff9fb"<br>
+						}<br>
+					</code>
+				</div>
+			</div>
+			<br>
+			<!-- End Obtaining an Authentication token  -->	
+
+			<!-- query for users -->
+			<h6 id="creating-a-blog-post">query for users</h6>
+			<div class="p-4">
+				<p>Request: GET</p>
+				<p>Headers:</p>
+				<div class="code-card">
+					<code>
+						Authorization: Token &lt;token&gt;
+					</code>	
+				</div>
+				<br>
+				<p>Url:</p>
+				<div class="code-card">
+					<code>
+						https://learning-kids.herokuapp.com/api/users/
+					</code>
+				</div>
+				<br>
+				<p>Success Response:</p>
+				<div class="code-card">
+					<code>
+						{<br>
+							&nbsp;"count": 2,<br>
+							&nbsp;"next": null,<br>
+							&nbsp;"previous": null,<br>
+							&nbsp;"results": [<br>
+							&nbsp;&nbsp;	{<br>
+								&nbsp;&nbsp;&nbsp;	"url": "http://127.0.0.1:8000/api/user/5",<br>
+								&nbsp;&nbsp;&nbsp;	"id": 5,<br>
+								&nbsp;&nbsp;&nbsp;	"email": "",<br>
+								&nbsp;&nbsp;&nbsp;	"username": "test",<br>
+								&nbsp;&nbsp;&nbsp;	"first_name": "",<br>
+								&nbsp;&nbsp;&nbsp;	"last_name": "",<br>
+							&nbsp;&nbsp;&nbsp;		"parentprofile": "http://127.0.0.1:8000/api/parent-profile/5"<br>
+							&nbsp;&nbsp;	},<br>
+							&nbsp;&nbsp;	{<br>
+									&nbsp;&nbsp;&nbsp;"url": "http://127.0.0.1:8000/api/user/1",<br>
+								&nbsp;&nbsp;&nbsp;	"id": 1,<br>
+								&nbsp;&nbsp;&nbsp;	"email": "alameenraji@gmail.com",<br>
+								&nbsp;&nbsp;&nbsp;	"username": "alameen",<br>
+								&nbsp;&nbsp;&nbsp;	"first_name": "somebody",<br>
+								&nbsp;&nbsp;&nbsp;	"last_name": "somebody",<br>
+								&nbsp;&nbsp;&nbsp;	"parentprofile": "http://127.0.0.1:8000/api/parent-profile/1"<br>
+							&nbsp;&nbsp;	}<br>
+						&nbsp;	]<br>
+						}<br>
+					</code>
+				</div>
+				
+					
+			</div>
+			<br>
+			<!-- End Creating a blog post -->
+			
+
+			<!-- Viewing a specific blog post -->
+			<h6 id="viewing-a-specific-blog-post">Viewing a Specific user</h6>
+			<div class="p-4">
+				<p>Request: GET</p>
+				<p>Headers:</p>
+				<div class="code-card">
+					<code>
+						Authorization: Token &lt;token&gt;
+					</code>	
+				</div>
+				<br>
+				<p>Url:</p>
+				<div class="code-card">
+					<code>
+						https://learning-kids.herokuapp.com/api/user/&lt;pk&gt;/
+					</code>
+				</div>
+				<br>
+				<p>Success Response:</p>
+				<div class="code-card">
+					<code>
+						{<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"url": "http://127.0.0.1:8000/api/user/5",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"id": 5,<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"email": "test@gmail.com",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"username": "test",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"first_name": ""<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"last_name": "",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"parentprofile": "http://127.0.0.1:8000/api/parent-profile/5",<br>
+						}
+					</code>
+				</div>
+			</div>
+			<br>
+			<!-- End Viewing a specific blog post  -->		
+
+
+
+			<!-- Updating a specific blog post -->
+			<h6 id="updating-a-specific-blog-post">Updating a specific user</h6>
+			<div class="p-4">
+				<p>Request: PUT</p>
+				<p>Headers:</p>
+				<div class="code-card">
+					<code>
+						Authorization: Token &lt;token&gt;
+					</code>	
+				</div>
+				<br>
+				<p>Url:</p>
+				<div class="code-card">
+					<code>
+						https://learning-kids.herokuapp.com/api/user/&lt;pk&gt;/
+					</code>
+				</div>
+				<br>
+				<p>Success Response:</p>
+				<div class="code-card">
+					<code>
+						{<br>
+						&nbsp;&nbsp;&nbsp;&nbsp; "success": "update successful"<br>
+						}<br>
+					</code>
+				</div>
+			</div>
+			<br>
+			<!-- End Updating a specific blog post  -->	
+			<h6>Viewing a Specific parent profile</h6>
+			<div class="p-4">
+				<p>Request: GET</p>
+				<p>Headers:</p>
+				<div class="code-card">
+					<code>
+						Authorization: Token &lt;token&gt;
+					</code>
+				</div>
+				<br>
+				<p>Url:</p>
+				<div class="code-card">
+					<code>
+						https://learning-kids.herokuapp.com/api/parent-profile/&lt;pk&gt;/
+					</code>
+				</div>
+				<br>
+				<p>Success Response:</p>
+				<div class="code-card">
+					<code>
+						{<br>
+						&nbsp;&nbsp;&nbsp;&nbsp; "url": "http://127.0.0.1:8000/api/parent-profile/1/",<br>
+						&nbsp;&nbsp;&nbsp; "id": 1,<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"user": "http://127.0.0.1:8000/api/user/1/",<br>
+						&nbsp;&nbsp;&nbsp;"avatar": "http://127.0.0.1:8000/media/default.jpg",<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;"childrenprofile_set": [<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "http://127.0.0.1:8000/api/child-profile/6/"<br>
+   &nbsp;&nbsp;&nbsp;&nbsp; ]<br>
+						}
+					</code>
+				</div>
+			</div>
+			<br>
+
+
+			<h6 id="updating-a-specific-blog-post">Updating a specific parent profile</h6>
+			<div class="p-4">
+				<p>Request: PUT</p>
+				<p>Headers:</p>
+				<div class="code-card">
+					<code>
+						Authorization: Token &lt;token&gt;
+					</code>
+				</div>
+				<br>
+				<p>Url:</p>
+				<div class="code-card">
+					<code>
+						https://learning-kids.herokuapp.com/api/parent-profile/&lt;pk&gt;/
+					</code>
+				</div>
+				<br>
+				<p>Success Response:</p>
+				<div class="code-card">
+					<code>
+						{<br>
+						&nbsp;&nbsp;&nbsp;&nbsp; "success": "update successful"<br>
+						}<br>
+					</code>
+				</div>
+			</div>
+			<br>
+
+
+
+
+
+			<!-- Deleting a specific blog post -->
+<!--			<h6 id="deleting-a-specific-blog-post">Deleting a Specific Blog Post</h6>-->
+<!--			<div class="p-4">-->
+<!--				<p>Request: DELETE</p>-->
+<!--				<p>Headers:</p>-->
+<!--				<div class="code-card">-->
+<!--					<code>-->
+<!--						Authorization: Token &lt;token&gt;-->
+<!--					</code>	-->
+<!--				</div>-->
+<!--				<br>-->
+<!--				<p>Url:</p>-->
+<!--				<div class="code-card">-->
+<!--					<code>-->
+<!--						https://open-api.xyz/api/blog/&lt;slug&gt;/delete-->
+<!--					</code>-->
+<!--				</div>-->
+<!--				<br>-->
+<!--				<p>Success Response:</p>-->
+<!--				<div class="code-card">-->
+<!--					<code>-->
+<!--						{<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;"response": "deleted"<br>-->
+<!--						}<br>-->
+<!--					</code>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<br>-->
+<!--			&lt;!&ndash; End Deleting a specific blog post  &ndash;&gt;	-->
+
+<!--			&lt;!&ndash; List Blog Posts (Pagination, Search and Ordering) &ndash;&gt;-->
+<!--			<h6 id="list-blog-posts">List Blog Posts (Pagination, Search and Ordering)</h6>-->
+<!--			<div class="p-4">-->
+<!--				<p>Request: GET</p>-->
+<!--				<p>Headers:</p>-->
+<!--				<div class="code-card">-->
+<!--					<code>-->
+<!--						Authorization: Token &lt;token&gt;-->
+<!--					</code>	-->
+<!--				</div>-->
+<!--				<br>-->
+<!--				<p>Url:</p>-->
+<!--				<div class="code-card">-->
+<!--					<code>-->
+<!--						https://open-api.xyz/api/blog/list/?search=&lt;<strong>query</strong>&gt;&ordering=-date_updated&page=1-->
+<!--					</code>-->
+<!--				</div>-->
+<!--				<br>-->
+<!--				<p>Params:</p>-->
+<!--				<div class="code-card">-->
+<!--					<p>query (this will search the title and body of blog posts for a match)</p>-->
+<!--					<p>ordering (Can use: title, body, username or date_updated)</p>-->
+<!--					<p>page (10 results will be shown per page.)</p>-->
+<!--				</div>-->
+<!--				<br>-->
+<!--				<p>Success Response:</p>-->
+<!--				<div class="code-card">-->
+<!--					<code>-->
+<!--						{<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;"count": &lt;num_results&gt;,<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;"next": null,<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;"previous": null,<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;"results": [<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"title": "gfhhfghfgh",<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"body": "fghgfhfghf",<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"image": "http://open-api.xyz/media/blog/1/gfhhfghfgh-1.png",<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"date_updated": "2019-07-05T21:43:56.452234Z",<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"username": "mitch"<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>-->
+<!--						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>-->
+<!--						}-->
+<!--					</code>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			&lt;!&ndash; End List Blog Posts (Pagination, Search and Ordering) &ndash;&gt;		-->
+
+<!--			<br><br>-->
+			<!-- end Documentation -->
+
+		</div>
+	</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
