@@ -33,6 +33,8 @@ def api_root(request, format=None):
         'register': reverse('api-register', request=request, format=format),
         'register-child': reverse('register-child', request=request, format=format),
         'categories': reverse('categories', request=request, format=format),
+        'images': reverse('images', request=request, format=format),
+        'videos': reverse('videos', request=request, format=format),
         'request-reset-email': reverse('request-reset-email', request=request, format=format),
         'password-rest-complete': reverse('password-reset-complete', request=request, format=format)
 
@@ -212,6 +214,26 @@ class CategoryListView(generics.ListAPIView):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Category.objects.all().order_by('-pk')
     serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    pagination_class = PageNumberPagination
+
+
+class VideoListView(generics.ListAPIView):
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Category.objects.all().order_by('-pk')
+    serializer_class = VideoSerializers
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    pagination_class = PageNumberPagination
+
+
+class ImageListView(generics.ListAPIView):
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Category.objects.all().order_by('-pk')
+    serializer_class = ImageSerializers
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
     pagination_class = PageNumberPagination
