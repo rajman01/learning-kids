@@ -10,7 +10,8 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from .serializers import (RegisterSerializer, UserSerializer, ParentProfileSerializer, ChildrenProfileSerializer,
                           RegisterChildSerializer, CategorySerializer, ImageSerializers, VideoSerializers,
-                          ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer)
+                          ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer, VideoListSerializers
+                          , ImageListSerializers)
 from rest_framework.authentication import TokenAuthentication
 from users.models import ParentProfile, ChildrenProfile
 from main.models import Category, Image, Video
@@ -223,7 +224,7 @@ class VideoListView(generics.ListAPIView):
     search_fields = ['name']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Category.objects.all().order_by('-pk')
-    serializer_class = VideoSerializers
+    serializer_class = VideoListSerializers
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
     pagination_class = PageNumberPagination
@@ -233,7 +234,7 @@ class ImageListView(generics.ListAPIView):
     search_fields = ['name']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Category.objects.all().order_by('-pk')
-    serializer_class = ImageSerializers
+    serializer_class = ImageListSerializers
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
     pagination_class = PageNumberPagination

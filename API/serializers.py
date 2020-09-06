@@ -133,6 +133,31 @@ class VideoSerializers(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'category', 'name', 'video_description', 'video_link']
 
 
+class VideoListSerializers(serializers.HyperlinkedModelSerializer):
+    category = serializers.HyperlinkedRelatedField(
+        view_name='category-detail',
+        read_only=True,
+        many=False
+    )
+
+    class Meta:
+        model = Video
+        fields = ['url', 'id', 'category', 'name', 'video_description', 'video_link']
+
+
+class ImageListSerializers(serializers.HyperlinkedModelSerializer):
+    category = serializers.HyperlinkedRelatedField(
+        view_name='category-detail',
+        read_only=True,
+        many=False
+    )
+
+    class Meta:
+        model = Image
+        fields = ['url', 'id', 'category', 'name', 'video_description', 'video_link']
+
+
+
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):
     email = serializers.EmailField(min_length=2)
 
