@@ -256,7 +256,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             current_site = get_current_site(request=request).domain
             relativeLink = reset_reverse('password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
             absurl = 'https://' + current_site + relativeLink
-            email_body = 'Hello, \n Use the link below to reset your password \n' + absurl
+            email_body = f'Hello {user.username}, \n use the link below to reset your password \n {absurl}'
             data = {'email_body': email_body, 'to_email': user.email, 'email_subject': 'Reset your password'}
             Util.send_email(data=data)
         return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
