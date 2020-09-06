@@ -224,7 +224,7 @@ class VideoListView(generics.ListAPIView):
     search_fields = ['name']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Category.objects.all().order_by('-pk')
-    serializer_class = VideoListSerializers
+    serializer_class = VideoSerializers
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
     pagination_class = PageNumberPagination
@@ -234,7 +234,7 @@ class ImageListView(generics.ListAPIView):
     search_fields = ['name']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Category.objects.all().order_by('-pk')
-    serializer_class = ImageListSerializers
+    serializer_class = ImageSerializers
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
     pagination_class = PageNumberPagination
