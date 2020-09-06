@@ -9,11 +9,18 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from .serializers import (RegisterSerializer, UserSerializer, ParentProfileSerializer, ChildrenProfileSerializer,
-                          RegisterChildSerializer, CategorySerializer, ImageSerializers, VideoSerializers)
+                          RegisterChildSerializer, CategorySerializer, ImageSerializers, VideoSerializers,
+                          ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer)
 from rest_framework.authentication import TokenAuthentication
 from users.models import ParentProfile, ChildrenProfile
 from main.models import Category, Image, Video
 from rest_framework.pagination import PageNumberPagination
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse as reset_reverse
+from .utils import Util
 
 
 @api_view(['GET'])
@@ -26,8 +33,11 @@ def api_root(request, format=None):
         'register': reverse('api-register', request=request, format=format),
         'register-child': reverse('register-child', request=request, format=format),
         'categories': reverse('categories', request=request, format=format),
+        'request-reset-email': reverse('request-reset-email', request=request, format=format),
+        'password-rest-complete': reverse('password-reset-complete', request=request, format=format)
 
     })
+
 
 @api_view(['GET'])
 @permission_classes(())
@@ -63,7 +73,7 @@ class ObtainAuthTokenView(APIView):
             username = request.data['username']
             password = request.data['password']
         except KeyError:
-            return Response({'error': 'All credentials must be provided'})
+            return Response({'error': 'All credentials must be provided'},status=status.HTTP_400_BAD_REQUEST)
         user = authenticate(username=username, password=password)
         if user:
             try:
@@ -98,7 +108,7 @@ class UserDetail(generics.RetrieveUpdateAPIView):
         object = self.get_object()
         user = request.user
         if object != user:
-            return Response({'response': 'you don\'t have permission to edit that'})
+            return Response({'response': 'you don\'t have permission to edit that'}, status=status.HTTP_403_FORBIDDEN)
         serializer = UserSerializer(object, data=request.data)
         data = {}
         if serializer.is_valid():
@@ -118,7 +128,7 @@ class ParentProfileView(generics.RetrieveUpdateAPIView):
         object = self.get_object()
         user = request.user
         if object.user != user:
-            return Response({'response': 'you don\'t have permission to edit that'})
+            return Response({'response': 'you don\'t have permission to edit that'}, status=status.HTTP_403_FORBIDDEN)
         serializer = ParentProfileSerializer(object, data=request.data, context={'request': request})
         data = {}
         if serializer.is_valid():
@@ -131,14 +141,14 @@ class ParentProfileView(generics.RetrieveUpdateAPIView):
 class ChildrenProfileView(generics.RetrieveUpdateAPIView):
     queryset = ChildrenProfile.objects.all()
     serializer_class = ChildrenProfileSerializer
-    permission_classes = []
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def put(self, request, *args, **kwargs):
         object = self.get_object()
         user = request.user
         if object.parent.user != user:
-            return Response({'response': 'you don\'t have permission to edit that'})
+            return Response({'response': 'you don\'t have permission to edit that'}, status=status.HTTP_403_FORBIDDEN)
         serializer = ChildrenProfileSerializer(object, data=request.data, context={'request': request})
         data = {}
         if serializer.is_valid():
@@ -157,7 +167,7 @@ def delete_child_view(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
     user = request.user
     if profile.parent.user != user:
-        return Response({'response': 'you don\'t have permission to delete that'})
+        return Response({'response': 'you don\'t have permission to delete that'}, status=status.HTTP_403_FORBIDDEN)
     if request.method == 'DELETE':
         operation = profile.delete()
         data = {}
@@ -183,7 +193,7 @@ def register_child_view(request):
         except User.DoesNotExist:
             return Response({'response': 'user does not exist'})
         if user1 != user2:
-            return Response({'response': 'you don\'t have permission to do that'})
+            return Response({'response': 'you don\'t have permission to do that'}, status=status.HTTP_403_FORBIDDEN)
         serializer = RegisterChildSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
@@ -226,3 +236,58 @@ class VideoView(generics.RetrieveAPIView):
     serializer_class = VideoSerializers
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
+
+class RequestPasswordResetEmail(generics.GenericAPIView):
+    serializer_class = ResetPasswordEmailRequestSerializer
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        try:
+            email = request.data['email']
+        except KeyError:
+            return Response({'error': 'Email must be provided'}, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(email=email).exists():
+            user = User.objects.get(email=email)
+            uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+            token = PasswordResetTokenGenerator().make_token(user)
+            current_site = get_current_site(request=request).domain
+            relativeLink = reset_reverse('password-reset-confirm', kwargs={'uidb64': uidb64, 'token': token})
+            absurl = 'https://' + current_site + relativeLink
+            email_body = 'Hello, \n Use the link below to reset your password \n' + absurl
+            data = {'email_body': email_body, 'to_email': user.email, 'email_subject': 'Reset your password'}
+            Util.send_email(data=data)
+        return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
+
+
+class PasswordTokenCheckApi(generics.GenericAPIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request, uidb64, token):
+        try:
+            id = smart_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(id=id)
+
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return Response({'error': 'Token not valid please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
+
+            return Response({'success': True, 'message': 'Credentials Valid', 'uidb64': uidb64, 'token': token},
+                            status=status.HTTP_200_OK)
+        except DjangoUnicodeDecodeError as identifier:
+            if not PasswordResetTokenGenerator().check_token(user):
+                return Response({'error': 'Token is not valid, please request a new one'},
+                                status=status.HTTP_401_UNAUTHORIZED)
+
+
+class SetNewPasswordAPIView(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+    permission_classes = []
+    authentication_classes = []
+
+    def patch(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)

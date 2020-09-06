@@ -16,5 +16,8 @@ urlpatterns = [
     path('image/<int:pk>/', views.ImageView.as_view(), name='image-detail'),
     path('video/<int:pk>/', views.VideoView.as_view(), name='video-detail'),
     path('delete-child-profile/<int:pk>/', views.delete_child_view, name='delete'),
-    path('documentation/', views.documentation, name='documentation')
+    path('documentation/', views.documentation, name='documentation'),
+    path('password-reset/<uidb64>/<token>/', views.PasswordTokenCheckApi.as_view(), name='password-reset-confirm'),
+    path('request-reset-email/', views.RequestPasswordResetEmail.as_view(), name='request-reset-email'),
+    path('password-reset-complete/', views.SetNewPasswordAPIView.as_view(), name='password-reset-complete'),
 ]

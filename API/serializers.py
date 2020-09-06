@@ -2,6 +2,10 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from users.models import ParentProfile, ChildrenProfile
 from main.models import Category, Image, Video
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -20,7 +24,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             password2 = self.validated_data['password2']
         except KeyError:
             raise serializers.ValidationError({'error': 'All credentials must be provided'})
-        if User.objects.filter(email=email).first():
+        if User.objects.filter(email=email).exists():
             raise serializers.ValidationError({'email': 'email already exist'})
         account = User(
             email=self.validated_data['email'],
@@ -127,3 +131,40 @@ class VideoSerializers(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Video
         fields = ['url', 'id', 'category', 'name', 'video_description', 'video_link']
+
+
+class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(min_length=2)
+
+    class Meta:
+        fields = ['email']
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(
+        min_length=6, max_length=68, write_only=True)
+    token = serializers.CharField(
+        min_length=1, write_only=True)
+    uidb64 = serializers.CharField(
+        min_length=1, write_only=True)
+
+    class Meta:
+        fields = ['password', 'token', 'uidb64']
+
+    def validate(self, attrs):
+        try:
+            password = attrs.get('password')
+            token = attrs.get('token')
+            uidb64 = attrs.get('uidb64')
+            id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(id=id)
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                raise AuthenticationFailed('The reset link is invalid', 401)
+
+            user.set_password(password)
+            user.save()
+
+            return (user)
+        except Exception as e:
+            raise AuthenticationFailed('The reset link is invalid', 401)
+        return super().validate(attrs)

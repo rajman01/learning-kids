@@ -17,7 +17,7 @@ class ParentProfile(models.Model):
 class ChildrenProfile(models.Model):
     parent = models.ForeignKey(ParentProfile, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    age = models.IntegerField(default=3, validators=[MinValueValidator(3)])
+    age = models.IntegerField(default=1, validators=[MinValueValidator(1)])
     GENDER_CHOICES = (
         ('Female', 'Female'),
         ('Male', 'Male'),
