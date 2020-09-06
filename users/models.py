@@ -23,7 +23,7 @@ class ChildrenProfile(models.Model):
         ('Male', 'Male'),
     )
     gender = models.CharField(max_length=30, choices=GENDER_CHOICES, default='Male')
-    avatar = models.ImageField(upload_to='avatar', blank=True, null=True, default='default.jpg')
+    avatar = models.ImageField(upload_to='avatar', blank=True, null=True, default='child_default.png')
     objects = models.Manager()
 
     class Meta:
