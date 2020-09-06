@@ -154,7 +154,7 @@ class ImageListSerializers(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['url', 'id', 'category', 'name', 'video_description', 'video_link']
+        fields = ['url', 'id', 'category', 'name', 'image_description', 'image']
 
 
 
