@@ -10,8 +10,8 @@ from rest_framework.exceptions import AuthenticationFailed
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.CharField()
-    password1 = serializers.CharField()
-    password2 = serializers.CharField()
+    password1 = serializers.CharField(min_length=8,write_only=True)
+    password2 = serializers.CharField(min_length=8,write_only=True)
 
     class Meta:
         model = User
